@@ -116,7 +116,7 @@ def __get_function_obj(func, module=None, package_path=None):
     return func
 
 
-def gexec(parameters, func, module=None, package_path=None):
+def gexec(func, parameters, module=None, package_path=None):
     """
     Executes the function <func> using the intersection of parameters between the
         function header and keys in <parameters>
@@ -125,24 +125,25 @@ def gexec(parameters, func, module=None, package_path=None):
         If the func is a String and is not in the current module;
             it will try to import the module <module> in <package_path> to execute <func>
 
-    :param parameters: Dictionary
     :param func: Function Object | String
+    :param parameters: Dictionary
     :param module: Module Object | String
     :param package_path: String
     :return: None | Object
 
-    >>> gexec(parameters={'dict_': {'a': 1, 'b': 2}, 'subset_keys': {'a'}}, func=__subset_dictionary)
+    >>> gexec(func=__subset_dictionary, parameters={'dict_': {'a': 1, 'b': 2}, 'subset_keys': {'a'}})
     {'a': 1}
 
-    >>> gexec(parameters={'dict_': {'a': 1, 'b': 2}, 'subset_keys': {'a'}}, func='__subset_dictionary')
+    >>> gexec(func='__subset_dictionary', parameters={'dict_': {'a': 1, 'b': 2}, 'subset_keys': {'a'}})
     {'a': 1}
 
-    >>> gexec(parameters={'dict_': {'a': 1, 'b': 2}, 'subset_keys': {'a'}}, \
-            func='__subset_dictionary', module='gexecute', package_path=getcwd())
+    >>> gexec(func='__subset_dictionary', parameters={'dict_': {'a': 1, 'b': 2}, 'subset_keys': {'a'}}, \
+            module='gexecute', package_path=getcwd())
     {'a': 1}
 
-    >>> gexec(parameters={'dict_': {'a': 1, 'b': 2}, 'subset_keys': {'a'}, 'junk': 'shouldn\\'t show up'}, \
-            func='__subset_dictionary', module='gexecute', package_path=getcwd())
+    >>> gexec(func='__subset_dictionary', \
+            parameters={'dict_': {'a': 1, 'b': 2}, 'subset_keys': {'a'}, 'junk': 'shouldn\\'t show up'}, \
+            module='gexecute', package_path=getcwd())
     {'a': 1}
     """
 
