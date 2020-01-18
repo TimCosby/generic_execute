@@ -1,0 +1,7 @@
+*/__init__.py
+build
+dist
+*.egg-info
+*.idea/
+.pypirc
+*__pycache__*
