@@ -7,7 +7,19 @@ The function can either be a string representation or a function object.
 
 If the function exists in another module; you must give either the module object or the package path and module name.
 
-<bold>Example:</bold>
+```
+How to Install: pip install gexecute
+```
+
+<br>
+
+```
+PiPy https://pypi.org/project/gexecute/
+```
+
+<br>
+
+<bold>How to use:</bold>
 ```
 def test(a, b, c='test'):
     print(a, b, c)
@@ -31,16 +43,4 @@ def test(a, b, c='test'):
 # If test is in the directory C:\python\test_module.py
 > gexec({'a': 1, 'b': 2, 'c': 3}, 'test', module='test_module', package_path='C:\python\')
 1, 2, 3
-```
-
-<br>
-
-```
-PiPy https://pypi.org/project/generic-execute/0.0.1/
-```
-
-<br>
-
-```
-How to Install: pip install gexecute
 ```
