@@ -1,15 +1,15 @@
-from setuptools import setup, find_packages
+from setuptools import setup
 
 with open('README.md', 'r') as file:
     long_description = file.read()
 
 setup(
     name='gexecute',
-    version='0.0.2',
+    version='0.0.3',
     author='Tim Cosby',
     author_email='tim470773@gmail.com',
     url='https://github.com/TimCosby/generic_execute',
-    description='Generically execute any function with a unknown set of parameters.',
+    description='Generically execute any function with a unknown function, module, or set of parameters!',
     long_description=long_description,
     long_description_content_type="text/markdown",
     py_modules=['gexecute'],
@@ -24,9 +24,3 @@ setup(
     python_requires='>=3.4',
     keywords='generic execute function module',
 )
-
-"""
-
-packages=find_packages(),
-
-"""
