@@ -5,7 +5,7 @@ with open('README.md', 'r') as file:
 
 setup(
     name='gexecute',
-    version='0.0.3',
+    version='0.0.5',
     author='Tim Cosby',
     author_email='tim470773@gmail.com',
     url='https://github.com/TimCosby/generic_execute',

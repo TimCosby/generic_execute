@@ -3,6 +3,7 @@ from importlib import import_module
 from sys import modules
 from os.path import exists, join
 from os import getcwd
+import logging
 
 
 def __get_cur_module():
@@ -171,7 +172,7 @@ def gexec(func, params, module=None, package_path=None):
 
     if not isinstance(params, dict):
         raise TypeError('{0} not supported for <params>! Needs to be a dictionary!'.format(type(params)))
-    elif not isinstance(module, str) and module is not None:
+    elif not isinstance(module, str) and not ismodule(module) and module is not None:
         raise TypeError('{0} not supported for <module>! Needs be either a module object or string!'.format(type(module)))
     elif not isinstance(package_path, str) and package_path is not None:
         raise TypeError('{0} not supported for <package path>! Needs to be a string!'.format(package_path))
@@ -181,5 +182,8 @@ def gexec(func, params, module=None, package_path=None):
         func = __get_function_obj(func=func, module=module, package_path=package_path)
 
     valid_params = __get_valid_input(func=func, params=params)
+
+    call_function = '{function}({parameters})'.format(function=func.__name__, parameters=', '.join(['{key}={value}'.format(key=key, value=valid_parameters[key]) for key in valid_parameters]))
+    logging.info(call_function)
 
     return func(**valid_params)
