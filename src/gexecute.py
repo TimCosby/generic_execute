@@ -183,7 +183,7 @@ def gexec(func, params, module=None, package_path=None):
 
     valid_params = __get_valid_input(func=func, params=params)
 
-    call_function = '{function}({parameters})'.format(function=func.__name__, parameters=', '.join(['{key}={value}'.format(key=key, value=valid_parameters[key]) for key in valid_parameters]))
+    call_function = '{function}({parameters})'.format(function=func.__name__, parameters=', '.join(['{key}={value}'.format(key=key, value=valid_params[key]) for key in valid_params]))
     logging.info(call_function)
 
     return func(**valid_params)
