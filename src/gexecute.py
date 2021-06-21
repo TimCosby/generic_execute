@@ -1,9 +1,10 @@
-from inspect import ismodule, isfunction, signature, Parameter
+import asyncio
 from importlib import import_module
-from sys import modules
-from os.path import exists, join
-from os import getcwd
+from inspect import getmodule, iscoroutinefunction, isfunction, ismodule, Parameter, signature, stack
 import logging
+from os import getcwd
+from os.path import exists, join
+from sys import modules
 
 
 def __get_cur_module():
@@ -125,8 +126,8 @@ def __get_function_obj(func, module=None, package_path=None):
             if isinstance(package_path, str):
                 module = __get_module_obj(module=module, package_path=package_path)
 
-            elif hasattr(__get_cur_module(), func):
-                module = __get_cur_module()
+            elif hasattr(getmodule(stack()[2][0]), func):
+                module = getmodule(stack()[2][0])
 
             else:
                 raise ValueError('If the function is not in the current module, package_path must specify the directory!')
@@ -139,7 +140,7 @@ def __get_function_obj(func, module=None, package_path=None):
     return func
 
 
-def gexec(func, params, module=None, package_path=None):
+def gexec(func, params=None, module=None, package_path=None):
     """
     Executes the function <func> using the intersection of params between the
         function header and keys in <params>
@@ -154,9 +155,6 @@ def gexec(func, params, module=None, package_path=None):
     :param package_path: String
     :return: None | Object
 
-    >>> gexec(func=__subset_dictionary, params={'dict_': {'a': 1, 'b': 2}, 'subset_keys': {'a'}})
-    {'a': 1}
-
     >>> gexec(func='__subset_dictionary', params={'dict_': {'a': 1, 'b': 2}, 'subset_keys': {'a'}})
     {'a': 1}
 
@@ -170,7 +168,7 @@ def gexec(func, params, module=None, package_path=None):
     {'a': 1}
     """
 
-    if not isinstance(params, dict):
+    if params is not None and not isinstance(params, dict):
         raise TypeError('{0} not supported for <params>! Needs to be a dictionary!'.format(type(params)))
     elif not isinstance(module, str) and not ismodule(module) and module is not None:
         raise TypeError('{0} not supported for <module>! Needs be either a module object or string!'.format(type(module)))
@@ -181,9 +179,17 @@ def gexec(func, params, module=None, package_path=None):
         # <func> is not a Function Object
         func = __get_function_obj(func=func, module=module, package_path=package_path)
 
-    valid_params = __get_valid_input(func=func, params=params)
+    if params is not None:
+        valid_params = __get_valid_input(func=func, params=params)
+    else:
+        valid_params = {}
 
     call_function = '{function}({parameters})'.format(function=func.__name__, parameters=', '.join(['{key}={value}'.format(key=key, value=valid_params[key]) for key in valid_params]))
     logging.info(call_function)
 
-    return func(**valid_params)
+    if iscoroutinefunction(func):
+        loop = asyncio.get_event_loop()
+        return loop.run_until_complete(func(**valid_params))
+    else:
+        return func(**valid_params)
+
