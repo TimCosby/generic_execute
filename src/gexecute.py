@@ -1,10 +1,12 @@
 import asyncio
+import nest_asyncio
 from importlib import import_module
 from inspect import getmodule, iscoroutinefunction, isfunction, ismodule, Parameter, signature, stack
 import logging
 from os import getcwd
 from os.path import exists, join
 from sys import modules
+nest_asyncio.apply()
 
 
 def __get_cur_module():
